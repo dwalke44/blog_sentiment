@@ -1,0 +1,9 @@
+renv/
+venv/
+/venv/
+.idea/
+*.Rproj
+*.Rproj.*
+database/
+config/
+
