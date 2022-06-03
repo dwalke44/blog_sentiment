@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -48,4 +49,8 @@ print(sitemap_i)
 # regex out month and year from sitemap
 year = sitemaps.str.extract("(\d+)")
 month = sitemaps.str.extract("(\d+)(?!.*\d)")
-print(month)
+
+driver.get(str(sitemap_i))
+# TODO: PARSE XML
+
+urls = driver.find_element(by=By.ID, )
