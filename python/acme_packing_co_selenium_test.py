@@ -22,6 +22,12 @@ for i in np.arange(0, len(date_sheet_cols)):
 date_sheet.columns = date_sheet_cols_s
 # print(date_sheet.head())
 
+sitemaps = ocur.execute(f"SELECT * FROM GB_SITEMAPS;").fetchall()
+sitemaps_s = []
+for i in np.arange(0, len(sitemaps)):
+    sitemaps_s.append(sitemaps[i][1])
+sitemaps = pd.Series(sitemaps_s)
+
 """
 Init chromedriver session
 """
