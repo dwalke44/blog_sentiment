@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-
 """
 Import dates to inform scraping
 """
@@ -40,9 +39,13 @@ driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager()
 
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
+"""
+Cycle through sitemaps and build list of URLs from each
+"""
 
-
-
-
-
-
+sitemap_i = sitemaps[0]
+print(sitemap_i)
+# regex out month and year from sitemap
+year = sitemaps.str.extract("(\d+)")
+month = sitemaps.str.extract("(\d+)(?!.*\d)")
+print(month)
