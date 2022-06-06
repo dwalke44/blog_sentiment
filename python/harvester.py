@@ -20,3 +20,7 @@ def data_import(dbpath, tbl_name):
     return df
 
 
+if __name__ == "__main__":
+    config = configparser.ConfigParser()
+    config.read('sentiment/config/config.ini')
+    print(config['LOCALDB']['urls_and_dates'])
