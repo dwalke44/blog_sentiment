@@ -23,4 +23,13 @@ def data_import(dbpath, tbl_name):
 if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read('config/config.ini')
-    print(config['LOCALDB']['urls_and_dates'])
+
+    # Read in some required file names and locations
+    dbpath = config['DEFAULT']['dbpath']
+    urls_and_dates = config['LOCALDB']['urls_and_dates']
+
+    guide_df = data_import(dbpath=dbpath,
+                           tbl_name=urls_and_dates)
+    guide_df.columns = ['URL', 'PUB_DATE', 'GAME_DATE']
+    print(guide_df.head())
+
