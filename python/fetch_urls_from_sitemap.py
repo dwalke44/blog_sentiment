@@ -2,10 +2,10 @@ import sqlite3
 import requests
 import pandas as pd
 import numpy as np
+import advertools as adv
 
 """
 This script will parse a list of XML files from a website's sitemap to compile a list of URLs for scraping
-Follows the tutorial at: https://www.geeksforgeeks.org/xml-parsing-python/
 """
 
 
@@ -21,14 +21,18 @@ def fetch_sitemaps(dbpath):
     for i in np.arange(0, len(sitemaps)):
         sitemaps_s.append(sitemaps[i][1])
     sitemaps_out = pd.Series(sitemaps_s)
-
+    ocur.close()
+    con.close()
     return sitemaps_out
 
 
-def get_links_from_sitemap_xml(sitemap_url):
+def fetch_single_xml(sitemap_url):
     """
-    Parses a single XML file for the URLs embedded therein
+    Uses advertools' sitemap_to_df fxn to parse single XML
     """
-    payload = requests.get(sitemap_url)
-    content = payload.text
-    return content
+    content_df = adv.sitemap_to_df(sitemap_url)
+
+    return content_df
+
+
+def save_to_db():
