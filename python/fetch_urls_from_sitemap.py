@@ -49,7 +49,7 @@ if __name__ == '__main__':
     # Read in config
     print(f'Reading config file.')
     config = configparser.ConfigParser()
-    config.read('sentiment/config/config.ini')
+    config.read('/config/config.ini')
     print(config['DEFAULT']['dbpath'])
     # Read in sitemap urls
     sitemaps = fetch_sitemaps(dbpath=config['DEFAULT']['dbpath'],
