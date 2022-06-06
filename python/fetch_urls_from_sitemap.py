@@ -65,7 +65,7 @@ if __name__ == '__main__':
         print(f'Exporting sitemap at {datetime.now()}')
         save_to_db(dbpath=config['DEFAULT']['dbpath'],
                    sitemap_url_df=parsed_sitemap,
-                   output_tbl_name=config['DEFAULT']['url_tbl_name'])
+                   output_tbl_name=config['LOCALDB']['url_tbl_name'])
         print(f'Iterating to next sitemap')
 
     print(f'Sitemaps parsed at {datetime.now()}.')
