@@ -41,7 +41,7 @@ def save_to_db(dbpath, sitemap_url_df, output_tbl_name):
     Appends extracted URLs from processed sitemap to db table
     """
     con = sqlite3.connect(f'{dbpath}')
-    sitemap_url_df.to_sql(f'{output_tbl_name}', con=con, if_exists='replace')
+    sitemap_url_df.to_sql(f'{output_tbl_name}', con=con, if_exists='append')
     con.close()
 
 
