@@ -22,5 +22,5 @@ def data_import(dbpath, tbl_name):
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
-    config.read('sentiment/config/config.ini')
+    config.read('config/config.ini')
     print(config['LOCALDB']['urls_and_dates'])
