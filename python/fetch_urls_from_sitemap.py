@@ -60,7 +60,8 @@ if __name__ == '__main__':
     # Parse XMLs and append to output db table
     for sitemap in sitemaps:
         print(f'Parsing sitemap {sitemap} at {datetime.now()}')
-        parsed_sitemap = fetch_single_xml(sitemap)
+        parsed_sitemap = fetch_single_xml(sitemap_url=sitemap)
+
         print(f'Exporting sitemap at {datetime.now()}')
         save_to_db(dbpath=config['DEFAULT']['dbpath'],
                    sitemap_url_df=parsed_sitemap,
