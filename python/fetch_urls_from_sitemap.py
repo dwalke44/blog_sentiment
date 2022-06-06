@@ -52,7 +52,7 @@ if __name__ == '__main__':
     config.read('sentiment/config/config.ini')
 
     # Read in sitemap urls
-    sitemaps = fetch_sitemaps(dbpath=config['DEFAULT']['dbpath'],
+    sitemaps = fetch_sitemaps(dbpath=config['dbpath'],
                               sm_tbl_name=config['LOCALDB']['sm_tbl_name'])
 
     print(f'Number of sitemaps to parse = {len(sitemaps)}')
