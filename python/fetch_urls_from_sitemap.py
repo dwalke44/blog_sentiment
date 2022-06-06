@@ -35,4 +35,10 @@ def fetch_single_xml(sitemap_url):
     return content_df
 
 
-def save_to_db():
+def save_to_db(dbpath, sitemap_url_df):
+    """
+    Appends extracted URLs from processed sitemap to db table
+    """
+    con = sqlite3.connect(f'{dbpath}')
+    sitemap_url_df.to_sql('GB_URLS', con=con, if_exists='replace')
+    con.close()
