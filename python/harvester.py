@@ -34,7 +34,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
     selector_method = selector_method.upper()
     valid_selector_methods = ['XPATH', 'ID', 'CLASS']
     if selector_method not in valid_selector_methods:
-        raise ValueError(f"Error: selector method must be one of {valid_selector_methods}")
+        raise ValueError(f"Selector method must be one of {valid_selector_methods}")
 
     # Init selenium sesh
     options = Options()
