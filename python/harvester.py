@@ -27,7 +27,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
     input: url
     input: selector_method: right now either ID or XPATH
     input: selector: input required for chosen selector method
-    output:
+    output: scraped_text: scraped text id'd by selector & method
     """
 
     # Ensure selector method is correct & formatted
@@ -51,19 +51,25 @@ def scrape_url(url: str, selector_method: str, selector: str):
     # Start scraping
     if selector_method == 'XPATH':
         try:
-            scraped_text = driver.find_element(by=By.XPATH, XPATH=selector)
+            scraped_text = driver.find_element(by=By.XPATH, XPATH=selector).text
         except e.ElementNotSelectableException:
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
-    else:
+    elif selector_method == 'ID':
         try:
-            scraped_text = driver.find_element(by=By.ID, ID=selector)
+            scraped_text = driver.find_element(by=By.ID, ID=selector).text
         except e.ElementNotSelectableException:
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
-
+    elif selector_method == 'CLASS':
+        try:
+            scraped_text = driver.find_element(by=By.CLASS_NAME, CLASS_NAME=selector).text
+        except e.ElementNotSelectableException:
+            print(f'Error: {e.ElementNotSelectableException}')
+        except e.InvalidSelectorException:
+            print(f'Error: {e.InvalidSelectorException}')
     driver.close()
 
     return scraped_text
@@ -86,7 +92,12 @@ if __name__ == "__main__":
                            tbl_name=urls_and_dates)
     guide_df.columns = ['URL', 'PUB_DATE', 'GAME_DATE']
 
+    selector_meth = config['SCRAPER']['selector_method']
+    selector = config['SCRAPER']['selector']
 
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
+        raw_text = scrape_url(url=url,
+                              selector_method='ID',
+                              selector=)
 
