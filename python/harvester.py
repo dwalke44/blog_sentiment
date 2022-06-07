@@ -32,7 +32,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
 
     # Ensure selector method is correct & formatted
     selector_method = selector_method.upper()
-    valid_selector_methods = ['XPATH', 'ID']
+    valid_selector_methods = ['XPATH', 'ID', 'CLASS']
     if selector_method not in valid_selector_methods:
         raise ValueError(f"Error: selector method must be one of {valid_selector_methods}")
 
