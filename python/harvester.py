@@ -98,6 +98,6 @@ if __name__ == "__main__":
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
         raw_text = scrape_url(url=url,
-                              selector_method='ID',
-                              selector=)
+                              selector_method=selector_meth,
+                              selector=selector)
 
