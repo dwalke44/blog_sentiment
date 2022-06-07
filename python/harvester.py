@@ -51,21 +51,21 @@ def scrape_url(url: str, selector_method: str, selector: str):
     # Start scraping
     if selector_method == 'XPATH':
         try:
-            scraped_text = driver.find_element(by=By.XPATH, XPATH=selector).text
+            scraped_text = driver.find_element(by=By.XPATH, value=f'{selector}').text
         except e.ElementNotSelectableException:
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
     elif selector_method == 'ID':
         try:
-            scraped_text = driver.find_element(by=By.ID, ID=selector).text
+            scraped_text = driver.find_element(by=By.ID, value=f'{selector}').text
         except e.ElementNotSelectableException:
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
     elif selector_method == 'CLASS':
         try:
-            scraped_text = driver.find_element(by=By.CLASS_NAME, CLASS_NAME=selector).text
+            scraped_text = driver.find_element(by=By.CLASS_NAME, value=f'{selector}').text
         except e.ElementNotSelectableException:
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
