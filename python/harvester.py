@@ -20,10 +20,20 @@ def data_import(dbpath, tbl_name):
     return df
 
 
-def scrape_url(url, xpath):
+def scrape_url(url, selector_method, selector):
     """
-    Takes a single URL, starts a Selenium sesh and scrapes text id'd by give XPath
+    Takes a single URL, starts a Selenium sesh and scrapes elements defined by selector & method
+    input: url
+    input: selector_method: right now either ID or XPATH
+    input: selector: input required for chosen selector method
+    output:
     """
+    # Ensure selector method is correct & formatted
+    selector_method = selector_method.upper()
+    valid_selector_methods = ['XPATH', 'ID']
+    if selector_method not in valid_selector_methods:
+        raise ValueError(f"Error: selector method must be one of {valid_selector_methods}")
+
     options = Options()
     options.add_argument('--headless')
     options.add_argument(
@@ -54,4 +64,8 @@ if __name__ == "__main__":
     guide_df = data_import(dbpath=dbpath,
                            tbl_name=urls_and_dates)
     guide_df.columns = ['URL', 'PUB_DATE', 'GAME_DATE']
+
+
+    for i in np.arange(0, guide_df.shape[0]):
+        url = guide_df.loc[i][0]
 
