@@ -3,6 +3,7 @@ import configparser
 import pandas as pd
 import numpy as np
 from selenium import webdriver
+import selenium.common.exceptions as e
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -20,7 +21,7 @@ def data_import(dbpath, tbl_name):
     return df
 
 
-def scrape_url(url, selector_method, selector):
+def scrape_url(url: str, selector_method: str, selector: str):
     """
     Takes a single URL, starts a Selenium sesh and scrapes elements defined by selector & method
     input: url
@@ -28,12 +29,14 @@ def scrape_url(url, selector_method, selector):
     input: selector: input required for chosen selector method
     output:
     """
+
     # Ensure selector method is correct & formatted
     selector_method = selector_method.upper()
     valid_selector_methods = ['XPATH', 'ID']
     if selector_method not in valid_selector_methods:
         raise ValueError(f"Error: selector method must be one of {valid_selector_methods}")
 
+    # Init selenium sesh
     options = Options()
     options.add_argument('--headless')
     options.add_argument(
@@ -45,8 +48,23 @@ def scrape_url(url, selector_method, selector):
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
     driver.get(url)
-    scraped_text = driver.find_element(by=By.XPATH, xpath=xpath).text
+    # Start scraping
+    if selector_method == 'XPATH':
+        try:
+            scraped_text = driver.find_element(by=By.XPATH, XPATH=selector_method)
+        except e.ElementNotSelectableException:
+            print(f'Error: {e.ElementNotSelectableException}')
+        except e.InvalidSelectorException:
+            print(f'Error: {e.InvalidSelectorException}')
+    else:
+        try:
+            scraped_text = driver.find_element(by=By.ID, ID=selector_method)
+        except e.ElementNotSelectableException:
+            print(f'Error: {e.ElementNotSelectableException}')
+        except e.InvalidSelectorException:
+            print(f'Error: {e.InvalidSelectorException}')
 
+    return scraped_text
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
