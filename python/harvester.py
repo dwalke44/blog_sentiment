@@ -100,4 +100,4 @@ if __name__ == "__main__":
         raw_text = scrape_url(url=url,
                               selector_method=selector_meth,
                               selector=selector)
-
+        print(raw_text)
