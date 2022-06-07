@@ -66,6 +66,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
 
     return scraped_text
 
+
 if __name__ == "__main__":
     config = configparser.ConfigParser()
     # --------------------------------------------
