@@ -64,6 +64,8 @@ def scrape_url(url: str, selector_method: str, selector: str):
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
 
+    driver.close()
+
     return scraped_text
 
 
