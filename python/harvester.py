@@ -99,6 +99,7 @@ if __name__ == "__main__":
 
     # Init stopwords dictionary to filter from raw text in preprocessing
     stop_words = set(stopwords.words('english'))
+    text_lengths = []
 
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
@@ -108,4 +109,6 @@ if __name__ == "__main__":
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
-        print(filt_text)
+        text_lengths.append(len(filt_text))
+
+    guide_df['CLEANED_TEXT_LEN'] = text_lengths
