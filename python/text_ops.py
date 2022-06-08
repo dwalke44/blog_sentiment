@@ -19,12 +19,10 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
     for sent in sent_tokens:
         words = word_tokenize(sent)
         word_tokens_int.append(words)
-        print(word_tokens_int)
     for sent in word_tokens_int:
         for word in sent:
             if word not in punctuation:
                 word_tokens.append(word)
-    print(word_tokens)
     # Filter out drop words
     filtered_sentence = []
     for w in word_tokens:
