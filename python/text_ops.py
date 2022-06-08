@@ -1,5 +1,4 @@
 import string
-import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
 import numpy as np
 

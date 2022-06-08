@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from nltk.corpus import stopwords
+from sentiment.python.text_ops import word_token_drop_sw
 
 def data_import(dbpath, tbl_name):
     """
@@ -103,4 +104,6 @@ if __name__ == "__main__":
         raw_text = scrape_url(url=url,
                               selector_method=selector_meth,
                               selector=selector)
-        print(raw_text)
+
+        token_text = word_token_drop_sw(raw_text=raw_text,
+                                        stopwords_set=stop_words)
