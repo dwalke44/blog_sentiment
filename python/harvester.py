@@ -23,6 +23,14 @@ def data_import(dbpath, tbl_name):
     return df
 
 
+def data_export(dbpath, df, tbl_name):
+    """
+    Export pandas dataframe to database
+    """
+    con = sqlite3.connect(f'{dbpath}')
+    print(f'Exporting to database')
+    df.to_sql(name=tbl_name, con=con)
+
 def scrape_url(url: str, selector_method: str, selector: str):
     """
     Takes a single URL, starts a Selenium sesh and scrapes elements defined by selector & method
@@ -112,3 +120,4 @@ if __name__ == "__main__":
         text_lengths.append(len(filt_text))
 
     guide_df['CLEANED_TEXT_LEN'] = text_lengths
+    guide_df.to_sql()
