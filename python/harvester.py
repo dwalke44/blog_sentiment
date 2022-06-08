@@ -13,6 +13,7 @@ from nltk.corpus import stopwords
 # from sentiment.python.text_ops import word_token_drop_sw
 from text_ops import word_token_drop_sw
 
+
 def data_import(dbpath, tbl_name):
     """
     Connects to SQL database and returns table given by tbl_name
