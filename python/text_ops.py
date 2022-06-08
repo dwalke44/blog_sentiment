@@ -1,11 +1,15 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, sent_tokenize
 import numpy as np
-import tensorflow as tf
-import tensorflow.keras as keras
-from tensorflow.keras import layers
-from tensorflow.keras.preprocessing import sequence
-from tensorflow.keras.preprocessing import text
 
-# test to ensure tf & keras are operating nominally
-(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
 
-def
+def text_preprocessing(raw_text: str, stopwords_set: set):
+    """
+    Processes scraped text by dropping stop words & indexing text
+    input: raw_text: string of text returned from webscraper
+    input: stopwords_set: set of English stopwords to be dropped from raw text
+    output: out_text
+    """
+
+

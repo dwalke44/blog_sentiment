@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
+from nltk.corpus import stopwords
 
 def data_import(dbpath, tbl_name):
     """
@@ -94,6 +94,9 @@ if __name__ == "__main__":
 
     selector_meth = config['SCRAPER']['selector_method']
     selector = config['SCRAPER']['selector']
+
+    # Init stopwords dictionary to filter from raw text in preprocessing
+    stop_words = set(stopwords.words('english'))
 
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
