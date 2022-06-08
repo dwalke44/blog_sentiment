@@ -31,7 +31,7 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
     # Filter out drop words
     filtered_text = []
     for w in word_tokens:
-        if w not in stopwords_set:
+        if w.lower() not in stopwords_set:
             filtered_text.append(w)
 
     return filtered_text
