@@ -58,7 +58,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
     driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
 
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-
+    driver.delete_all_cookies()
     driver.get(url)
     # Start scraping
     if selector_method == 'XPATH':
