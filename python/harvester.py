@@ -2,6 +2,7 @@ import sqlite3
 import configparser
 import pandas as pd
 import numpy as np
+from datetime import datetime
 from selenium import webdriver
 import selenium.common.exceptions as e
 from selenium.webdriver.common.by import By
@@ -97,6 +98,7 @@ if __name__ == "__main__":
     # Read in some required file names and locations
     dbpath = config['DEFAULT']['dbpath']
     urls_and_dates = config['LOCALDB']['urls_and_dates']
+    output_tbl_name = config['LOCALDB']['output_table_name']
 
     guide_df = data_import(dbpath=dbpath,
                            tbl_name=urls_and_dates)
@@ -109,6 +111,8 @@ if __name__ == "__main__":
     stop_words = set(stopwords.words('english'))
     text_lengths = []
 
+    start = datetime.now()
+    print(f'Beginning web scraping & text processing at {start}')
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
         raw_text = scrape_url(url=url,
@@ -118,6 +122,8 @@ if __name__ == "__main__":
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
         text_lengths.append(len(filt_text))
-
+    print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
     guide_df['CLEANED_TEXT_LEN'] = text_lengths
-    guide_df.to_sql()
+    data_export(dbpath=dbpath,
+                df=guide_df,
+                tbl_name=output_tbl_name)
