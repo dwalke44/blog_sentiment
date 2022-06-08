@@ -10,23 +10,28 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
     input: stopwords_set: set of English stopwords to be dropped from raw text
     output: out_text
     """
+    # Base punctuation list missing an ’ so add that to filter list
     punctuation = string.punctuation + "’"
+
     # Tokenize text into sentences
     sent_tokens = sent_tokenize(raw_text)
+
     # Tokenize sentences into words & drop punctuation
     word_tokens = []
     word_tokens_int = []
     for sent in sent_tokens:
         words = word_tokenize(sent)
         word_tokens_int.append(words)
+        # print(word_tokens_int)
     for sent in word_tokens_int:
         for word in sent:
             if word not in punctuation:
                 word_tokens.append(word)
+
     # Filter out drop words
-    filtered_sentence = []
+    filtered_text = []
     for w in word_tokens:
         if w not in stopwords_set:
-            filtered_sentence.append(w)
+            filtered_text.append(w)
 
-    return filtered_sentence
+    return filtered_text

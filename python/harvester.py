@@ -105,6 +105,6 @@ if __name__ == "__main__":
                               selector_method=selector_meth,
                               selector=selector)
 
-        token_text = word_token_drop_sw(raw_text=raw_text,
+        filt_text = word_token_drop_sw(raw_text=raw_text,
                                         stopwords_set=stop_words)
         print(token_text)
