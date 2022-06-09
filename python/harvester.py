@@ -70,14 +70,11 @@ def scrape_url(url: str, selector_method: str, selector: str):
     driver.get(url)
     # Start scraping
     if selector_method == 'XPATH':
-        try:
-            scraped_text = driver.find_element(by=By.XPATH, value=f'{selector}').text
+        scraped_text = driver.find_element(by=By.XPATH, value=f'{selector}').text
     elif selector_method == 'ID':
-        try:
-            scraped_text = driver.find_element(by=By.ID, value=f'{selector}').text
+        scraped_text = driver.find_element(by=By.ID, value=f'{selector}').text
     elif selector_method == 'CLASS':
-        try:
-            scraped_text = driver.find_element(by=By.CLASS_NAME, value=f'{selector}').text
+        scraped_text = driver.find_element(by=By.CLASS_NAME, value=f'{selector}').text
     driver.close()
 
     return scraped_text
