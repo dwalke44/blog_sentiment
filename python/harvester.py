@@ -33,6 +33,7 @@ def data_export(dbpath, df, tbl_name):
     print(f'Exporting to database')
     df.to_sql(name=tbl_name, con=con)
 
+
 def scrape_url(url: str, selector_method: str, selector: str):
     """
     Takes a single URL, starts a Selenium sesh and scrapes elements defined by selector & method
