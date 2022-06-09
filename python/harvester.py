@@ -122,12 +122,14 @@ if __name__ == "__main__":
             # Take a break & restart driver, reattempt URL if TimeoutError
             driver.close()
             time.sleep(10)
-            driver = selenium_session()
-            raw_text = scrape_url(url=url,
-                                  selector_method=selector_meth,
-                                  selector=selector,
-                                  driver=driver)
-
+            try:
+                driver = selenium_session()
+                raw_text = scrape_url(url=url,
+                                      selector_method=selector_meth,
+                                      selector=selector,
+                                      driver=driver)
+            except e.TimeoutException:
+                continue
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
