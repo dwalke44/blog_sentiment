@@ -72,32 +72,12 @@ def scrape_url(url: str, selector_method: str, selector: str):
     if selector_method == 'XPATH':
         try:
             scraped_text = driver.find_element(by=By.XPATH, value=f'{selector}').text
-        except e.ElementNotSelectableException:
-            print(f'Error: {e.ElementNotSelectableException}')
-        except e.InvalidSelectorException:
-            print(f'Error: {e.InvalidSelectorException}')
     elif selector_method == 'ID':
         try:
             scraped_text = driver.find_element(by=By.ID, value=f'{selector}').text
-        except e.ElementNotSelectableException:
-            print(f'Error: {e.ElementNotSelectableException}')
-        except e.InvalidSelectorException:
-            print(f'Error: {e.InvalidSelectorException}')
     elif selector_method == 'CLASS':
         try:
             scraped_text = driver.find_element(by=By.CLASS_NAME, value=f'{selector}').text
-        except e.ElementNotSelectableException:
-            print(f'Error: {e.ElementNotSelectableException}')
-        except e.InvalidSelectorException:
-            print(f'Error: {e.InvalidSelectorException}')
-        except e.TimeoutException:
-            # Take a break & restart driver, reattempt URL if TimeoutError
-            time.sleep(10)
-            driver.close()
-            driver = selenium_session()
-            driver.get(url)
-            scraped_text = driver.find_element(by=By.CLASS_NAME, value=f'{selector}').text
-
     driver.close()
 
     return scraped_text
@@ -132,9 +112,24 @@ if __name__ == "__main__":
     print(f'Beginning web scraping & text processing at {start}')
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
-        raw_text = scrape_url(url=url,
-                              selector_method=selector_meth,
-                              selector=selector)
+        try:
+            raw_text = scrape_url(url=url,
+                                  selector_method=selector_meth,
+                                  selector=selector)
+        except e.ElementNotSelectableException:
+            print(f'Error: {e.ElementNotSelectableException}')
+        except e.InvalidSelectorException:
+            print(f'Error: {e.InvalidSelectorException}')
+        except e.TimeoutException:
+            # Take a break & restart driver, reattempt URL if TimeoutError
+            time.sleep(10)
+            driver.close()
+            driver = selenium_session()
+            driver.get(url)
+            raw_text = scrape_url(url=url,
+                                  selector_method=selector_meth,
+                                  selector=selector)
+
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
