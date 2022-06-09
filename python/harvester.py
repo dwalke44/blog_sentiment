@@ -1,5 +1,6 @@
 import sqlite3
 import configparser
+import time
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -34,6 +35,22 @@ def data_export(dbpath, df, tbl_name):
     df.to_sql(name=tbl_name, con=con)
 
 
+def selenium_session():
+    # Init selenium sesh
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument(
+        "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0) Gecko/20100101 Firefox/100.0")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    driver.delete_all_cookies()
+    return driver
+
+
 def scrape_url(url: str, selector_method: str, selector: str):
     """
     Takes a single URL, starts a Selenium sesh and scrapes elements defined by selector & method
@@ -49,18 +66,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
     if selector_method not in valid_selector_methods:
         raise ValueError(f"Selector method must be one of {valid_selector_methods}")
 
-    # Init selenium sesh
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0) Gecko/20100101 Firefox/100.0")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
-
-    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-    driver.delete_all_cookies()
+    driver = selenium_session()
     driver.get(url)
     # Start scraping
     if selector_method == 'XPATH':
@@ -84,6 +90,14 @@ def scrape_url(url: str, selector_method: str, selector: str):
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
+        except e.TimeoutException:
+            # Take a break & restart driver, reattempt URL if TimeoutError
+            time.sleep(10)
+            driver.close()
+            driver = selenium_session()
+            driver.get(url)
+            scraped_text = driver.find_element(by=By.CLASS_NAME, value=f'{selector}').text
+
     driver.close()
 
     return scraped_text
