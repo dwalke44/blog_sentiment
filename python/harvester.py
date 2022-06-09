@@ -51,7 +51,7 @@ def selenium_session():
     return driver
 
 
-def scrape_url(url: str, selector_method: str, selector: str):
+def scrape_url(url: str, selector_method: str, selector: str, driver: webdriver):
     """
     Takes a single URL, starts a Selenium sesh and scrapes elements defined by selector & method
     input: url
@@ -66,7 +66,6 @@ def scrape_url(url: str, selector_method: str, selector: str):
     if selector_method not in valid_selector_methods:
         raise ValueError(f"Selector method must be one of {valid_selector_methods}")
 
-    driver = selenium_session()
     driver.get(url)
     # Start scraping
     if selector_method == 'XPATH':
@@ -110,22 +109,24 @@ if __name__ == "__main__":
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
         try:
+            driver = selenium_session()
             raw_text = scrape_url(url=url,
                                   selector_method=selector_meth,
-                                  selector=selector)
+                                  selector=selector,
+                                  driver=driver)
         except e.ElementNotSelectableException:
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
         except e.TimeoutException:
             # Take a break & restart driver, reattempt URL if TimeoutError
-            time.sleep(10)
             driver.close()
+            time.sleep(10)
             driver = selenium_session()
-            driver.get(url)
             raw_text = scrape_url(url=url,
                                   selector_method=selector_meth,
-                                  selector=selector)
+                                  selector=selector,
+                                  driver=driver)
 
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
