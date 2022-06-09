@@ -10,8 +10,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from nltk.corpus import stopwords
-# from sentiment.python.text_ops import word_token_drop_sw
-from text_ops import word_token_drop_sw
+from sentiment.python.text_ops import word_token_drop_sw
+# from text_ops import word_token_drop_sw
 
 
 def data_import(dbpath, tbl_name):
@@ -51,6 +51,7 @@ def scrape_url(url: str, selector_method: str, selector: str):
     # Init selenium sesh
     options = Options()
     options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
     options.add_argument(
         "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0) Gecko/20100101 Firefox/100.0")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -91,10 +92,10 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    # config.read('sentiment/config/config.ini')
+    config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
-    config.read('config/config.ini')
+    # config.read('config/config.ini')
 
     # Read in some required file names and locations
     dbpath = config['DEFAULT']['dbpath']
