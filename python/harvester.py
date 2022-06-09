@@ -129,6 +129,7 @@ if __name__ == "__main__":
                                       selector=selector,
                                       driver=driver)
             except e.TimeoutException:
+                raw_text = np.nan
                 continue
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
