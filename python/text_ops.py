@@ -1,6 +1,6 @@
 import string
 from nltk.tokenize import word_tokenize, sent_tokenize
-from keras import preprocessing
+from keras.preprocessing.text import Tokenizer
 
 
 def word_token_drop_sw(raw_text: str, stopwords_set: set):
@@ -41,4 +41,5 @@ def prep_tokens_for_embed(token_list, desired_len):
     """
     Takes clean list of tokens & converts to integer, pads to desired length
     """
+    t = Tokenizer(num_words=desired_len)
 

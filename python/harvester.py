@@ -84,10 +84,10 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    # config.read('sentiment/config/config.ini')
+    config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
-    config.read('config/config.ini')
+    # config.read('config/config.ini')
 
     # Read in some required file names and locations
     dbpath = config['DEFAULT']['dbpath']
@@ -138,7 +138,8 @@ if __name__ == "__main__":
         # From KDE analysis, know that most tokens >= 250, all under 3318
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
         embed_len = 300
-        current_len = len(filt_text)
+
+
 
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
     guide_df['CLEANED_TEXT_LEN'] = text_lengths
