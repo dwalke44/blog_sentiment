@@ -17,3 +17,5 @@ df.TOKEN_LEN.plot.density(color='blue')
 plt.title('KDE - token lengths')
 plt.show()
 plt.savefig(f'{os.getcwd()}/sentiment/output/plots/kde.png')
+
+df.TOKEN_LEN.max()

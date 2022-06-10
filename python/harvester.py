@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+
 from nltk.corpus import stopwords
 from sentiment.python.text_ops import word_token_drop_sw
 # from text_ops import word_token_drop_sw
@@ -134,7 +135,11 @@ if __name__ == "__main__":
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
-        text_lengths.append(len(filt_text))
+        # From KDE analysis, know that most tokens >= 250, all under 3318
+        # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
+        embed_len = 300
+        current_len = len(filt_text)
+
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
     guide_df['CLEANED_TEXT_LEN'] = text_lengths
     data_export(dbpath=dbpath,

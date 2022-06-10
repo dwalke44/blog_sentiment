@@ -1,6 +1,6 @@
 import string
 from nltk.tokenize import word_tokenize, sent_tokenize
-import numpy as np
+from keras import preprocessing
 
 
 def word_token_drop_sw(raw_text: str, stopwords_set: set):
@@ -35,3 +35,10 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
             filtered_text.append(w)
 
     return filtered_text
+
+
+def prep_tokens_for_embed(token_list, desired_len):
+    """
+    Takes clean list of tokens & converts to integer, pads to desired length
+    """
+
