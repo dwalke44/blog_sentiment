@@ -140,10 +140,11 @@ if __name__ == "__main__":
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
         top_n_words = sort_filtered_text(filtered_text=filt_text,
                                          desired_len=embed_len)
-
+        output = [url]
+        for tup in top_n_words:
+            output.append(tup[0])
+        out = pd.Series(output)
+        print(f'Exporting top {embed_len} tokens from URL[{i}] to database')
+        data_export(dbpath=dbpath, df=out, tbl_name=output_tbl_name)
 
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
-    guide_df['CLEANED_TEXT_LEN'] = text_lengths
-    data_export(dbpath=dbpath,
-                df=guide_df,
-                tbl_name=output_tbl_name)
