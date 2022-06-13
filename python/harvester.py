@@ -137,7 +137,7 @@ if __name__ == "__main__":
                                        stopwords_set=stop_words)
         # From KDE analysis, know that most tokens >= 250, all under 3318
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
-        embed_len = 300
+        embed_len = config['TEXT_OPS']['token_len']
 
 
 
