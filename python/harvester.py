@@ -110,6 +110,7 @@ if __name__ == "__main__":
     print(f'Beginning web scraping & text processing at {start}')
     for i in np.arange(0, guide_df.shape[0]):
         url = guide_df.loc[i][0]
+        gameday = guide_df.loc[i][2]
         try:
             driver = selenium_session()
             raw_text = scrape_url(url=url,
@@ -140,7 +141,7 @@ if __name__ == "__main__":
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
         top_n_words = sort_filtered_text(filtered_text=filt_text,
                                          desired_len=embed_len)
-        output = [url]
+        output = [url, gameday]
         for tup in top_n_words:
             output.append(tup[0])
         out = pd.Series(output)
