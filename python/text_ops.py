@@ -5,6 +5,9 @@ from keras.utils import pad_sequences
 
 
 class Vectorizer:
+    def __init__(self):
+        self.vocabulary = None
+
     def standardize(self, text):
         text = text.lower()
         return "".join(char for char in text if char not in string.punctuation)
@@ -72,6 +75,7 @@ def standardize_token_sequences(token_list, desired_len):
     """
     Takes clean list of tokens & converts to integer, pads to desired length
     """
+    desired_len = int(desired_len)
     t = Tokenizer(num_words=desired_len)
     t.fit_on_texts(token_list)
     sequence = t.texts_to_sequences(token_list)

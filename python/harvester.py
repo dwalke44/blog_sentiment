@@ -12,7 +12,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from nltk.corpus import stopwords
-from sentiment.python.text_ops import word_token_drop_sw
+from sentiment.python.text_ops import word_token_drop_sw, standardize_token_sequences
 # from text_ops import word_token_drop_sw
 
 
@@ -93,6 +93,7 @@ if __name__ == "__main__":
     dbpath = config['DEFAULT']['dbpath']
     urls_and_dates = config['LOCALDB']['urls_and_dates']
     output_tbl_name = config['LOCALDB']['output_table_name']
+    embed_len = config['TEXT_OPS']['token_len']
 
     guide_df = data_import(dbpath=dbpath,
                            tbl_name=urls_and_dates)
@@ -137,8 +138,8 @@ if __name__ == "__main__":
                                        stopwords_set=stop_words)
         # From KDE analysis, know that most tokens >= 250, all under 3318
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
-        embed_len = config['TEXT_OPS']['token_len']
-
+        text_vect = standardize_token_sequences(token_list=filt_text,
+                                                desired_len=embed_len)
 
 
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
