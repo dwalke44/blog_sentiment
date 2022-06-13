@@ -134,6 +134,19 @@ if __name__ == "__main__":
             except e.TimeoutException:
                 raw_text = np.nan
                 continue
+        except e.WebDriverException:
+            # Take a break & restart driver, reattempt URL if TimeoutError
+            driver.close()
+            time.sleep(10)
+            try:
+                driver = selenium_session()
+                raw_text = scrape_url(url=url,
+                                      selector_method=selector_meth,
+                                      selector=selector,
+                                      driver=driver)
+            except e.TimeoutException:
+                raw_text = np.nan
+                continue
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
@@ -144,7 +157,7 @@ if __name__ == "__main__":
         output = [url, gameday]
         for tup in top_n_words:
             output.append(tup[0])
-        out = pd.Series(output)
+        out = pd.Series(output).transpose()
         print(f'Exporting top {embed_len} tokens from URL[{i}] to database')
         data_export(dbpath=dbpath, df=out, tbl_name=output_tbl_name)
 
