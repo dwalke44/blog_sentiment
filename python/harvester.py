@@ -12,8 +12,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from nltk.corpus import stopwords
-from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
-# from text_ops import word_token_drop_sw
+# from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
+from text_ops import word_token_drop_sw, sort_filtered_text
 
 
 def data_import(dbpath, tbl_name):
@@ -84,10 +84,10 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    config.read('sentiment/config/config.ini')
+    # config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
-    # config.read('config/config.ini')
+    config.read('config/config.ini')
 
     # Read in some required file names and locations
     dbpath = config['DEFAULT']['dbpath']
