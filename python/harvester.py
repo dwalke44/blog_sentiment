@@ -12,8 +12,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from nltk.corpus import stopwords
-# from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
-from text_ops import word_token_drop_sw, sort_filtered_text
+from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
+# from text_ops import word_token_drop_sw, sort_filtered_text
 
 
 def data_import(dbpath, tbl_name):
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # Init stopwords dictionary to filter from raw text in preprocessing
     stop_words = set(stopwords.words('english'))
     text_lengths = []
-
+    out_df = pd.DataFrame()
     start = datetime.now()
     print(f'Beginning web scraping & text processing at {start}')
     for i in np.arange(0, guide_df.shape[0]):
@@ -158,7 +158,9 @@ if __name__ == "__main__":
         for tup in top_n_words:
             output.append(tup[0])
         out = pd.Series(output).transpose()
-        print(f'Exporting top {embed_len} tokens from URL[{i}] to database')
-        data_export(dbpath=dbpath, df=out, tbl_name=output_tbl_name)
 
+        out_df.append(out, ignore_index=True)
+
+    print(f'Exporting top {embed_len} tokens from URL[{i}] to database')
+    data_export(dbpath=dbpath, df=out_df, tbl_name=output_tbl_name)
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
