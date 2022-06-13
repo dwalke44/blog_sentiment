@@ -1,4 +1,5 @@
 import string
+import re
 from collections import Counter
 from nltk.tokenize import word_tokenize, sent_tokenize
 from keras.preprocessing.text import Tokenizer
@@ -59,8 +60,8 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
         # print(word_tokens_int)
     for sent in word_tokens_int:
         for word in sent:
-            if word not in punctuation:
-                word_tokens.append(word.strip('(\d)+'))
+            if re.sub("\d+", "", word) not in punctuation:
+                word_tokens.append(word)
 
     # Filter out drop words
     filtered_text = []
@@ -77,6 +78,7 @@ def sort_filtered_text(filtered_text, desired_len):
     """
     desired_len = int(desired_len)
     count = Counter(filtered_text).most_common(n=desired_len)
+
     return count
 
 # def standardize_token_sequences(token_list, desired_len):
