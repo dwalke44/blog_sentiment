@@ -154,13 +154,14 @@ if __name__ == "__main__":
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
         top_n_words = sort_filtered_text(filtered_text=filt_text,
                                          desired_len=embed_len)
+        print(f'Processing tokens from URL[{i}]')
         output = [url, gameday]
         for tup in top_n_words:
             output.append(tup[0])
         out = pd.Series(output).transpose()
-
+        print(f'Saving to final dataframe')
         out_df.append(out, ignore_index=True)
 
-    print(f'Exporting top {embed_len} tokens from URL[{i}] to database')
+    print(f'Exporting df of shape {out_df.shape} to database at {datetime.now()}')
     data_export(dbpath=dbpath, df=out_df, tbl_name=output_tbl_name)
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
