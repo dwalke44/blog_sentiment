@@ -1,4 +1,5 @@
 import string
+from collections import Counter
 from nltk.tokenize import word_tokenize, sent_tokenize
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
@@ -59,7 +60,7 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
     for sent in word_tokens_int:
         for word in sent:
             if word not in punctuation:
-                word_tokens.append(word)
+                word_tokens.append(word.strip('(\d)+'))
 
     # Filter out drop words
     filtered_text = []
@@ -70,17 +71,24 @@ def word_token_drop_sw(raw_text: str, stopwords_set: set):
     return filtered_text
 
 
-def standardize_token_sequences(token_list, desired_len):
+def sort_filtered_text(filtered_text, desired_len):
     """
-    Takes clean list of tokens & converts to integer, pads to desired length
+    Arranges filtered tokens & returns {desired_len} most occurring tokens
     """
-    desired_len = int(desired_len)
-    t = Tokenizer(num_words=desired_len)
-    t.fit_on_texts(token_list)
-    sequence = t.texts_to_sequences(token_list)
-    word_index = t.word_index
-    output = pad_sequences(sequence, maxlen=desired_len)
-    v = Vectorizer()
-    v.make_vocabulary(dataset=token_list)
-    v.encode(text=token_list)
-    return word_index, output
+    count = Counter(filtered_text).most_common(n=desired_len)
+    return count
+
+# def standardize_token_sequences(token_list, desired_len):
+#     """
+#     Takes clean list of tokens & converts to integer, pads to desired length
+#     """
+#     desired_len = int(desired_len)
+#     t = Tokenizer(num_words=desired_len)
+#     t.fit_on_texts(token_list)
+#     sequence = t.texts_to_sequences(token_list)
+#     word_index = t.word_index
+#     output = pad_sequences(sequence, maxlen=desired_len)
+#     v = Vectorizer()
+#     v.make_vocabulary(dataset=token_list)
+#     enc = v.encode(token_list=token_list)
+#     return word_index, output
