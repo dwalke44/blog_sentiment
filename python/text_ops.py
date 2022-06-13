@@ -75,6 +75,7 @@ def sort_filtered_text(filtered_text, desired_len):
     """
     Arranges filtered tokens & returns {desired_len} most occurring tokens
     """
+    desired_len = int(desired_len)
     count = Counter(filtered_text).most_common(n=desired_len)
     return count
 
