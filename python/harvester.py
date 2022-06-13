@@ -33,7 +33,7 @@ def data_export(dbpath, df, tbl_name):
     """
     con = sqlite3.connect(f'{dbpath}')
     print(f'Exporting to database')
-    df.to_sql(name=tbl_name, con=con)
+    df.to_sql(name=tbl_name, con=con, if_exists='append')
 
 
 def selenium_session():
