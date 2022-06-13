@@ -9,6 +9,14 @@ class Vectorizer:
         self.inverse_vocabulary = None
         self.vocabulary = None
 
+    def standardize(self, text):
+        text = text.lower()
+        return "".join(char for char in text if char not in string.punctuation)
+
+    def tokenize(self, text):
+        text = self.standardize(text)
+        return text.split()
+
     def make_vocabulary(self, dataset):
         self.vocabulary = {"": 0, "[UNK]": 1}
         for text in dataset:
