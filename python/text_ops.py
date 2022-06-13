@@ -6,15 +6,8 @@ from keras.utils import pad_sequences
 
 class Vectorizer:
     def __init__(self):
+        self.inverse_vocabulary = None
         self.vocabulary = None
-
-    def standardize(self, text):
-        text = text.lower()
-        return "".join(char for char in text if char not in string.punctuation)
-
-    def tokenize(self, text):
-        text = self.standardize(text)
-        return text.split()
 
     def make_vocabulary(self, dataset):
         self.vocabulary = {"": 0, "[UNK]": 1}
@@ -27,10 +20,8 @@ class Vectorizer:
         self.inverse_vocabulary = dict(
             (v, k) for k, v in self.vocabulary.items())
 
-    def encode(self, text):
-        text = self.standardize(text)
-        tokens = self.tokenize(text)
-        return [self.vocabulary.get(token, 1) for token in tokens]
+    def encode(self, token_list):
+        return [self.vocabulary.get(token, 1) for token in token_list]
 
     def decode(self, int_sequence):
         return " ".join(
@@ -81,5 +72,7 @@ def standardize_token_sequences(token_list, desired_len):
     sequence = t.texts_to_sequences(token_list)
     word_index = t.word_index
     output = pad_sequences(sequence, maxlen=desired_len)
-
+    v = Vectorizer()
+    v.make_vocabulary(dataset=token_list)
+    v.encode(text=token_list)
     return word_index, output

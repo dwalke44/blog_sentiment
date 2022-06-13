@@ -138,8 +138,8 @@ if __name__ == "__main__":
                                        stopwords_set=stop_words)
         # From KDE analysis, know that most tokens >= 250, all under 3318
         # DESIGN DECISION- call it 300 - pad shorter token lists, truncate longer
-        text_vect = standardize_token_sequences(token_list=filt_text,
-                                                desired_len=embed_len)
+        word_index, text_vect = standardize_token_sequences(token_list=filt_text,
+                                                            desired_len=embed_len)
 
 
     print(f'Scraping & processing of {guide_df.shape[0]} URLs completed at {datetime.now()-start}.')
