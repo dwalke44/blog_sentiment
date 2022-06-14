@@ -108,7 +108,7 @@ if __name__ == "__main__":
     out_df = pd.DataFrame()
     start = datetime.now()
     print(f'Beginning web scraping & text processing at {start}')
-    for i in np.arange(0, guide_df.shape[0]):
+    for i in np.arange(0, guide_df.shape[0]-2):
         url = guide_df.loc[i][0]
         gameday = guide_df.loc[i][2]
         try:
@@ -158,9 +158,12 @@ if __name__ == "__main__":
         output = [url, gameday]
         for tup in top_n_words:
             output.append(tup[0])
-        out = pd.Series(output).transpose()
+        out = pd.Series(output)
+        if len(out) < (int(embed_len)+2):
+            out = out.reindex(range((int(embed_len)+2)))
+
         print(f'Saving to final dataframe')
-        out_df.append(out, ignore_index=True)
+        out_df = out_df.append(out, ignore_index=True)
 
     print(f'Exporting df of shape {out_df.shape} to database at {datetime.now()}')
     data_export(dbpath=dbpath, df=out_df, tbl_name=output_tbl_name)
