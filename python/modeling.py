@@ -1,6 +1,7 @@
 import configparser
 import sqlite3
 import pandas as pd
+import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 # from harvester import data_import, data_export
@@ -18,6 +19,11 @@ def fetch_gamedays(input_tbl: str, dbpath: str):
     return df
 
 
+def fetch_tokens(gameday: str, db_tbl: str, dbpath: str, num_samples: int):
+    """
+
+    """
+
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     # --------------------------------------------
@@ -28,7 +34,10 @@ if __name__ == '__main__':
     # config.read('config/config.ini')
     dbpath = config['DEFAULT']['dbpath']
     date_tbl = config['LOCALDB']['urls_dates_tokens']
+    num_urls_per_sample = int(config['MODEL_OPS']['num_urls_per_sample'])
 
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
-
+    for i in np.arange(0, len(dates)):
+        gameday = dates[0][i]
+        sample =
