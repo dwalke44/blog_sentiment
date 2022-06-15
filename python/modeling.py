@@ -53,3 +53,4 @@ if __name__ == '__main__':
                                            db_tbl=date_tbl,
                                            dbpath=dbpath,
                                            num_samples=num_urls_per_sample)
+        # Create embeddings from standardized token df
