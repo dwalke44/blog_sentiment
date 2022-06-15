@@ -26,6 +26,9 @@ if __name__ == '__main__':
     # comment out when dev complete
     # ---------------------------------------------
     # config.read('config/config.ini')
-    date_tbl = config['LOCALDB']['']
+    dbpath = config['DEFAULT']['dbpath']
+    date_tbl = config['LOCALDB']['urls_dates_tokens']
 
-    dates = fetch_gamedays()
+    dates = fetch_gamedays(input_tbl=date_tbl,
+                           dbpath=dbpath)
+    print(dates.head())
