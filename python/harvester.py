@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # Read in some required file names and locations
     dbpath = config['DEFAULT']['dbpath']
     urls_and_dates = config['LOCALDB']['urls_and_dates']
-    output_tbl_name = config['LOCALDB']['output_table_name']
+    output_tbl_name = config['LOCALDB']['urls_dates_tokens']
     embed_len = config['TEXT_OPS']['token_len']
 
     guide_df = data_import(dbpath=dbpath,
