@@ -19,10 +19,17 @@ def fetch_gamedays(input_tbl: str, dbpath: str):
     return df
 
 
-def fetch_tokens(gameday: str, db_tbl: str, dbpath: str, num_samples: int):
+def fetch_standardized_tokens(gameday: str, db_tbl: str, dbpath: str, num_samples: int):
     """
-
+    Fetches data for gameday & returns df of sampled number of URLs
+    Sample of URLS: different numbers of blogs per gameday, but have to standardize to minimum bc
+        neural nets require standardized input shapes
     """
+    con = sqlite3.connect(f'{dbpath}')
+    ocur = con.cursor()
+    full_df = pd.DataFrame(ocur.execute(f'SELECT * FROM {db_tbl} where "1" = "{gameday}";').fetchall())
+    sampled_df = full_df.sample(n=num_samples, axis=0)
+    return sampled_df
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
@@ -39,5 +46,9 @@ if __name__ == '__main__':
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
     for i in np.arange(0, len(dates)):
+        # Read in and sample tokens to form standardized input
         gameday = dates[0][i]
-        sample =
+        sample = fetch_standardized_tokens(gameday=gameday,
+                                           db_tbl=date_tbl,
+                                           dbpath=dbpath,
+                                           num_samples=num_urls_per_sample)
