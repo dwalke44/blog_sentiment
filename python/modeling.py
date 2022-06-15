@@ -31,6 +31,7 @@ def fetch_standardized_tokens(gameday: str, db_tbl: str, dbpath: str, num_sample
     sampled_df = full_df.sample(n=num_samples, axis=0)
     return sampled_df
 
+
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     # --------------------------------------------
