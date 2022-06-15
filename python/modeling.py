@@ -31,4 +31,4 @@ if __name__ == '__main__':
 
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
-    print(dates.head())
+
