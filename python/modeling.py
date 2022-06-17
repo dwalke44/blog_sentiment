@@ -33,6 +33,19 @@ def fetch_standardized_tokens(gameday: str, db_tbl: str, dbpath: str, num_sample
     return sampled_df
 
 
+def get_outcomes(input_tbl: str, dbpath: str):
+    """
+    Get game day and outcomes for prediction
+    """
+    con = sqlite3.connect(f'{dbpath}')
+    ocur = con.cursor()
+    df = pd.DataFrame(ocur.execute(f'SELECT DISTINCT "1" FROM {input_tbl};').fetchall())
+
+    return df
+
+
+
+
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     # --------------------------------------------
@@ -44,9 +57,11 @@ if __name__ == '__main__':
     dbpath = config['DEFAULT']['dbpath']
     date_tbl = config['LOCALDB']['urls_dates_tokens']
     num_urls_per_sample = int(config['MODEL_OPS']['num_urls_per_sample'])
-
+    # Get guiding index - gameday dates
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
+    # Get dependent variable & gamedate
+
     for i in np.arange(0, len(dates)):
         # Read in and sample tokens to form standardized input
         gameday = dates[0][i]
@@ -55,7 +70,8 @@ if __name__ == '__main__':
                                            dbpath=dbpath,
                                            num_samples=num_urls_per_sample)
         sample.fillna(value='Empty', inplace=True)
-        # Create embeddings from standardized token df
+
+        # Reconstitute string of top 300 words per blog per gameday
         tokens_only = sample.iloc[:, 3:sample.shape[1]]
         labels = sample.iloc[:, 1:3]
         concat_samples = pd.DataFrame(dtype=str)
@@ -64,3 +80,4 @@ if __name__ == '__main__':
             s = pd.Series(' '.join(single_pg))
             concat_samples = concat_samples.append(s, ignore_index=True)
 
+        #
