@@ -27,7 +27,7 @@ def fetch_standardized_tokens(gameday: str, db_tbl: str, dbpath: str, num_sample
     """
     con = sqlite3.connect(f'{dbpath}')
     ocur = con.cursor()
-    full_df = pd.DataFrame(ocur.execute(f'SELECT * FROM {db_tbl} where "1" = "{gameday}";').fetchall())
+    full_df = pd.DataFrame(ocur.execute(f'SELECT * FROM {db_tbl} where "1" = "{gameday}" ORDER BY "0";').fetchall())
     sampled_df = full_df.sample(n=num_samples, axis=0)
     return sampled_df
 
@@ -54,3 +54,6 @@ if __name__ == '__main__':
                                            dbpath=dbpath,
                                            num_samples=num_urls_per_sample)
         # Create embeddings from standardized token df
+        tokens_only = sample.iloc[:, 3:sample.shape[1]]
+        labels = sample.iloc[:, 1:3]
+
