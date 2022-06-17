@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
+from keras.layers import TextVectorization
 # from harvester import data_import, data_export
 from sentiment.python.harvester import data_import, data_export
 
@@ -53,7 +54,13 @@ if __name__ == '__main__':
                                            db_tbl=date_tbl,
                                            dbpath=dbpath,
                                            num_samples=num_urls_per_sample)
+        sample.fillna(value='Empty', inplace=True)
         # Create embeddings from standardized token df
         tokens_only = sample.iloc[:, 3:sample.shape[1]]
         labels = sample.iloc[:, 1:3]
+        concat_samples = pd.DataFrame(dtype=str)
+        for j in np.arange(0, tokens_only.shape[0]):
+            single_pg = tokens_only.iloc[j, :].to_list()
+            s = pd.Series(' '.join(single_pg))
+            concat_samples = concat_samples.append(s, ignore_index=True)
 
