@@ -33,17 +33,16 @@ def fetch_standardized_tokens(gameday: str, db_tbl: str, dbpath: str, num_sample
     return sampled_df
 
 
-def get_outcomes(input_tbl: str, dbpath: str):
+def get_outcomes(result_tbl: str, dbpath: str):
     """
     Get game day and outcomes for prediction
     """
     con = sqlite3.connect(f'{dbpath}')
     ocur = con.cursor()
-    df = pd.DataFrame(ocur.execute(f'SELECT DISTINCT "1" FROM {input_tbl};').fetchall())
+    df = pd.DataFrame(ocur.execute(f'SELECT GB.GAMEDAY, GB.GB_RESULT FROM {result_tbl} GB WHERE GB.SEASON = 2021;')
+                      .fetchall())
 
     return df
-
-
 
 
 if __name__ == '__main__':
@@ -61,6 +60,10 @@ if __name__ == '__main__':
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
     # Get dependent variable & gamedate
+    results = config['LOCALDB']['result_tbl']
+
+    results = get_outcomes(result_tbl=results,
+                           dbpath=dbpath)
 
     for i in np.arange(0, len(dates)):
         # Read in and sample tokens to form standardized input
