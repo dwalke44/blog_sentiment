@@ -5,6 +5,7 @@ import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from keras.layers import TextVectorization
+from keras.models import Sequential
 # from harvester import data_import, data_export
 from sentiment.python.harvester import data_import, data_export
 
@@ -83,4 +84,11 @@ if __name__ == '__main__':
             s = pd.Series(' '.join(single_pg))
             concat_samples = concat_samples.append(s, ignore_index=True)
 
-        #
+        # Modeling
+        vectorize_layer = TextVectorization(output_mode='int')
+
+        # Call `adapt` on the text-only dataset to create the vocabulary.
+        vectorize_layer.adapt(concat_samples)
+
+        # Create the model that uses the vectorize text layer
+        model = Sequential()
