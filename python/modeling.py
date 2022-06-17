@@ -94,6 +94,18 @@ if __name__ == '__main__':
         word_counts = sorted(counts, key=counts.get, reverse=True)
         word_to_int = {word: ii for ii, word in enumerate(word_counts, 1)}
 
+        mapped_text = []
+        for m in concat_samples.iloc[:, 0]:
+            mapped_text.append([word_to_int[word] for word in m.split()])
+
+        # Left pad integer sequences
+        seq_len = 300
+        sequences = np.zeros((len(mapped_text), seq_len), dtype=int)
+        for n, row in enumerate(mapped_text):
+            text_arr = np.array(row)
+            sequences[n, -len(row):] = text_arr[-seq_len:]
+        print(sequences)
+
         # Modeling
         vectorize_layer = TextVectorization(output_mode='int')
 
