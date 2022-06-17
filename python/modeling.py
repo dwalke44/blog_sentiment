@@ -2,6 +2,7 @@ import configparser
 import sqlite3
 import pandas as pd
 import numpy as np
+from collections import Counter
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from keras.layers import TextVectorization
@@ -83,6 +84,15 @@ if __name__ == '__main__':
             single_pg = tokens_only.iloc[j, :].to_list()
             s = pd.Series(' '.join(single_pg))
             concat_samples = concat_samples.append(s, ignore_index=True)
+
+        # Use counter to convert strings to counts of occurrence
+        counts = Counter()
+        for k in np.arange(0, concat_samples.shape[0]):
+            text = concat_samples[0][k]
+            counts.update(text.split())
+        # Create mapping from counter
+        word_counts = sorted(counts, key=counts.get, reverse=True)
+        word_to_int = {word: ii for ii, word in enumerate(word_counts, 1)}
 
         # Modeling
         vectorize_layer = TextVectorization(output_mode='int')
