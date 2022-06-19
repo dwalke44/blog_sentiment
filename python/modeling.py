@@ -80,31 +80,18 @@ if __name__ == '__main__':
         tokens_only = sample.iloc[:, 3:sample.shape[1]]
         labels = sample.iloc[:, 1:3]
         concat_samples = pd.DataFrame(dtype=str)
+        # Takes all 30 blog posts & concats into single string per blog post
         for j in np.arange(0, tokens_only.shape[0]):
             single_pg = tokens_only.iloc[j, :].to_list()
             s = pd.Series(' '.join(single_pg))
             concat_samples = concat_samples.append(s, ignore_index=True)
 
         # Use counter to convert strings to counts of occurrence
-        counts = Counter()
-        for k in np.arange(0, concat_samples.shape[0]):
-            text = concat_samples[0][k]
-            counts.update(text.split())
-        # Create mapping from counter
-        word_counts = sorted(counts, key=counts.get, reverse=True)
-        word_to_int = {word: ii for ii, word in enumerate(word_counts, 1)}
-
-        mapped_text = []
-        for m in concat_samples.iloc[:, 0]:
-            mapped_text.append([word_to_int[word] for word in m.split()])
-
-        # Left pad integer sequences
+        # Init vocab for first manual run, but this object needs to be persisted and updated as learning from blogs
+        # goes on
+        vocab = Counter()
         seq_len = 300
-        sequences = np.zeros((len(mapped_text), seq_len), dtype=int)
-        for n, row in enumerate(mapped_text):
-            text_arr = np.array(row)
-            sequences[n, -len(row):] = text_arr[-seq_len:]
-        print(sequences)
+
 
         # Modeling
         vectorize_layer = TextVectorization(output_mode='int')

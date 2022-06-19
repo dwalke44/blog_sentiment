@@ -1,5 +1,6 @@
 import string
 import re
+import numpy as np
 from collections import Counter
 from nltk.tokenize import word_tokenize, sent_tokenize
 from keras.preprocessing.text import Tokenizer
@@ -80,6 +81,39 @@ def sort_filtered_text(filtered_text, desired_len):
     count = Counter(filtered_text).most_common(n=desired_len)
 
     return count
+
+
+def convert_samples_to_model_input(cleaned_samples, counter_vocabulary, seq_len=300):
+    """
+    Converts tokenized blog texts to updated vocabulary and integer array representing blogs
+    input: cleaned_samples: pd.DataFrame of one blog post per row, single string of cleaned tokens
+    input: counter_vocabulary: Counter() object of vocabulary
+    input: seq_len: required length of integers per sample
+    output: vocab: updated Counter() object dictionary of words & their number of occurrences
+    output: sequences: ndarray of converted text to integers
+    """
+    vocab = counter_vocabulary
+    for k in np.arange(0, cleaned_samples.shape[0]):
+        text = cleaned_samples[0][k]
+        vocab.update(text.split())
+    # Create mapping from counter
+    word_counts = sorted(vocab, key=vocab.get, reverse=True)
+
+    # Produce ranks of words by occurrence, defining their int representation
+    word_to_int = {word: ii for ii, word in enumerate(word_counts, 1)}
+
+    # Map each blog sample from words to int using dictionary produced in prev step
+    mapped_text = []
+    for m in cleaned_samples.iloc[:, 0]:
+        mapped_text.append([word_to_int[word] for word in m.split()])
+
+    # Left pad integer sequences
+    sequences = np.zeros((len(mapped_text), seq_len), dtype=int)
+    for n, row in enumerate(mapped_text):
+        text_arr = np.array(row)
+        sequences[n, -len(row):] = text_arr[-seq_len:]
+
+    return vocab, sequences
 
 # def standardize_token_sequences(token_list, desired_len):
 #     """
