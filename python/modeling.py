@@ -1,5 +1,6 @@
 import configparser
 import sqlite3
+import pickle
 import pandas as pd
 import numpy as np
 from collections import Counter
@@ -9,7 +10,7 @@ from keras.layers import TextVectorization
 from keras.models import Sequential
 # from harvester import data_import, data_export
 from sentiment.python.harvester import data_import, data_export
-
+from sentiment.python.text_ops import convert_samples_to_model_input
 
 def fetch_gamedays(input_tbl: str, dbpath: str):
     """
@@ -58,6 +59,7 @@ if __name__ == '__main__':
     dbpath = config['DEFAULT']['dbpath']
     date_tbl = config['LOCALDB']['urls_dates_tokens']
     num_urls_per_sample = int(config['MODEL_OPS']['num_urls_per_sample'])
+    vocab_pickle = f"{config['DEFAULT']['pickle_jar']}/vocab.pickle"
     # Get guiding index - gameday dates
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
@@ -86,11 +88,22 @@ if __name__ == '__main__':
             s = pd.Series(' '.join(single_pg))
             concat_samples = concat_samples.append(s, ignore_index=True)
 
-        # Use counter to convert strings to counts of occurrence
-        # Init vocab for first manual run, but this object needs to be persisted and updated as learning from blogs
-        # goes on
-        vocab = Counter()
-        seq_len = 300
+        # Use counter to convert strings to counts of occurrence & update vocabulary
+        if [config]['DEFAULT']['first_run']:
+            # Init vocab for first manual run, but this object needs to be persisted and updated as learning from blogs
+            # goes on
+            vocab = Counter()
+            vocab, sequences = convert_samples_to_model_input(cleaned_samples=concat_samples,
+                                                              counter_vocabulary=vocab)
+            # Export vocab as pickle
+            with open(vocab_pickle, 'wb') as outputfile:
+                pickle.dump(vocab, outputfile)
+        else:
+            # Get vocab pickle
+            with open(vocab_pickle, 'rb') as inputfile:
+                vocab = pickle.load(inputfile)
+            vocab, sequences = convert_samples_to_model_input(cleaned_samples=concat_samples,
+                                                              counter_vocabulary=vocab)
 
 
         # Modeling
