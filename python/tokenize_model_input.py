@@ -48,7 +48,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    config.read('sentiment/config/config.ini')
+    # config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
     config.read('config/config.ini')
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     results = get_outcomes(result_tbl=results,
                            dbpath=dbpath)
 
-    for i in np.arange(1, len(dates)):
+    for i in np.arange(0, len(dates)):
         # Read in and sample tokens to form standardized input
         gameday = dates[0][i]
         print(f'Handling gameday date of {gameday} at {datetime.datetime.now()}')
