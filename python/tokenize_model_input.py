@@ -102,7 +102,7 @@ if __name__ == '__main__':
             con = sqlite3.connect(f'{dbpath}')
             sequence_df.to_sql(name=config['MODEL_OPS']['input_tbl'], con=con, if_exists='replace')
             config.set('DEFAULT', 'first_run', 'no')
-            # Write the new structure to the new file
+            # Write the new structure to the config file
             with open('config/config.ini', 'w') as configfile:
                 config.write(configfile)
         else:
