@@ -3,7 +3,8 @@ import sqlite3
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from keras.models import Sequential
+from keras.layers import Embedding, Flatten, Dense
 
 def fetch_all_training_data(dbpath:str, tbl_name:str):
     """
@@ -29,3 +30,6 @@ if __name__ == "__main__":
     input_tbl_name = config['MODEL_OPS']['input_tbl']
 
     input_df = fetch_all_training_data(dbpath=dbpath, tbl_name=input_tbl_name)
+    dates = input_df.iloc[:, 301].unique()
+
+    for i in np.arange(0, dates):
