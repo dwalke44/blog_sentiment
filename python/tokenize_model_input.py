@@ -63,7 +63,7 @@ if __name__ == '__main__':
     results = get_outcomes(result_tbl=results,
                            dbpath=dbpath)
 
-    for i in np.arange(0, len(dates)):
+    for i in np.arange(1, len(dates)):
         # Read in and sample tokens to form standardized input
         gameday = dates[0][i]
         sample = fetch_standardized_tokens(gameday=gameday,
