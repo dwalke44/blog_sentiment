@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers import Embedding, Flatten, Dense
 
+
 def fetch_all_training_data(dbpath:str, tbl_name:str):
     """
     Gets complete season of tokenized blog text for training in model
@@ -64,4 +65,9 @@ if __name__ == "__main__":
     model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
 
     # Train model
-    # for i in np.arange(0, dates):
+    for i in np.arange(0, len(dates)):
+        X = input_df[input_df.iloc[:, 301] == dates[i]]
+        X = X.iloc[:, 1:301]
+        X_train = X.sample(n=25)
+        X_test = X.drop(X_train.index)
+        y_train = np.array(y[i], X_train.shape[1])
