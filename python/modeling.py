@@ -1,7 +1,6 @@
 import configparser
 import math
 import sqlite3
-import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,6 +30,7 @@ def standardize_targets(targets):
         output.append((x-mean)/std_dev)
 
     return mean, std_dev, output
+
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
