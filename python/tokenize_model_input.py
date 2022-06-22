@@ -100,7 +100,7 @@ if __name__ == '__main__':
             sequence_df = sequence_df.assign(gamedate=gameday)
             sequence_df = sequence_df.assign(result=results.loc[results[0]==gameday, 1][i])
             con = sqlite3.connect(f'{dbpath}')
-            sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='replace')
+            sequence_df.to_sql(name=config['MODEL_OPS']['input_tbl'], con=con, if_exists='replace')
 
         else:
             # Get vocab pickle
@@ -119,5 +119,5 @@ if __name__ == '__main__':
             sequence_df = sequence_df.assign(gamedate=gameday)
             sequence_df = sequence_df.assign(result=results.loc[results[0] == gameday, 1][i])
             con = sqlite3.connect(f'{dbpath}')
-            sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='append')
+            sequence_df.to_sql(name=config['MODEL_OPS']['input_tbl'], con=con, if_exists='append')
         print(f'Iterating to next gameday')
