@@ -48,7 +48,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    # config.read('sentiment/config/config.ini')
+    config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
     config.read('config/config.ini')
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             concat_samples = concat_samples.append(s, ignore_index=True)
 
         # Use counter to convert strings to counts of occurrence & update vocabulary
-        if config['DEFAULT']['first_run']:
+        if config['DEFAULT']['first_run'] == 'yes':
             # Init vocab for first manual run, but this object needs to be persisted and updated as learning from blogs
             # goes on
             vocab = Counter()
@@ -101,7 +101,10 @@ if __name__ == '__main__':
             sequence_df = sequence_df.assign(result=results.loc[results[0]==gameday, 1][i])
             con = sqlite3.connect(f'{dbpath}')
             sequence_df.to_sql(name=config['MODEL_OPS']['input_tbl'], con=con, if_exists='replace')
-
+            config.set('DEFAULT', 'first_run', 'no')
+            # Write the new structure to the new file
+            with open('config/config.ini', 'w') as configfile:
+                config.write(configfile)
         else:
             # Get vocab pickle
             vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/vocab.pickle"

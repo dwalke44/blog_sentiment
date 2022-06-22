@@ -16,13 +16,16 @@ def fetch_all_training_data(dbpath:str, tbl_name:str):
     return df
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    # config.read('sentiment/config/config.ini')
+    config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
-    config.read('config/config.ini')
+    # config.read('config/config.ini')
+
     dbpath = config['DEFAULT']['dbpath']
     input_tbl_name = config['MODEL_OPS']['input_tbl']
+
+    input_df = fetch_all_training_data(dbpath=dbpath, tbl_name=input_tbl_name)
