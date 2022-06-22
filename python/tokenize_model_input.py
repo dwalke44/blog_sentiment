@@ -4,13 +4,8 @@ import pickle
 import pandas as pd
 import numpy as np
 from collections import Counter
-from keras.preprocessing.text import Tokenizer
-from keras.utils import pad_sequences
-from keras.layers import TextVectorization
-from keras.models import Sequential
-# from harvester import data_import, data_export
-from sentiment.python.harvester import data_import, data_export
 from sentiment.python.text_ops import convert_samples_to_model_input
+
 
 def fetch_gamedays(input_tbl: str, dbpath: str):
     """
@@ -88,16 +83,23 @@ if __name__ == '__main__':
             concat_samples = concat_samples.append(s, ignore_index=True)
 
         # Use counter to convert strings to counts of occurrence & update vocabulary
-        if [config]['DEFAULT']['first_run']:
+        if config['DEFAULT']['first_run']:
             # Init vocab for first manual run, but this object needs to be persisted and updated as learning from blogs
             # goes on
             vocab = Counter()
             vocab, sequences = convert_samples_to_model_input(cleaned_samples=concat_samples,
                                                               counter_vocabulary=vocab)
             # Export vocab as pickle
-            vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/"
+            vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/vocab.pickle"
             with open(vocab_pickle, 'wb') as outputfile:
                 pickle.dump(vocab, outputfile)
+
+            sequence_df = pd.DataFrame(sequences)
+            sequence_df = sequence_df.assign(gamedate=gameday)
+            sequence_df = sequence_df.assign(result=results.loc[results[0]==gameday, 1][0])
+            con = sqlite3.connect(f'{dbpath}')
+            sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='append')
+
         else:
             # Get vocab pickle
             vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/vocab.pickle"
@@ -106,12 +108,14 @@ if __name__ == '__main__':
             vocab, sequences = convert_samples_to_model_input(cleaned_samples=concat_samples,
                                                               counter_vocabulary=vocab)
 
+            # Export vocab as pickle
+            vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/vocab.pickle"
+            with open(vocab_pickle, 'wb') as outputfile:
+                pickle.dump(vocab, outputfile)
 
-        # Modeling
-        vectorize_layer = TextVectorization(output_mode='int')
-
-        # Call `adapt` on the text-only dataset to create the vocabulary.
-        vectorize_layer.adapt(concat_samples)
-
-        # Create the model that uses the vectorize text layer
-        model = Sequential()
+            sequence_df = pd.DataFrame(sequences)
+            sequence_df = sequence_df.assign(gamedate=gameday)
+            sequence_df = sequence_df.assign(result=results.loc[results[0] == gameday, 1][0])
+            con = sqlite3.connect(f'{dbpath}')
+            sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='append')
+        message(f'Iterating to next gameday')
