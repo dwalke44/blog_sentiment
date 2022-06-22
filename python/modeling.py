@@ -59,7 +59,6 @@ if __name__ == '__main__':
     dbpath = config['DEFAULT']['dbpath']
     date_tbl = config['LOCALDB']['urls_dates_tokens']
     num_urls_per_sample = int(config['MODEL_OPS']['num_urls_per_sample'])
-    vocab_pickle = f"{config['DEFAULT']['pickle_jar']}/vocab.pickle"
     # Get guiding index - gameday dates
     dates = fetch_gamedays(input_tbl=date_tbl,
                            dbpath=dbpath)
@@ -96,10 +95,12 @@ if __name__ == '__main__':
             vocab, sequences = convert_samples_to_model_input(cleaned_samples=concat_samples,
                                                               counter_vocabulary=vocab)
             # Export vocab as pickle
+            vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/"
             with open(vocab_pickle, 'wb') as outputfile:
                 pickle.dump(vocab, outputfile)
         else:
             # Get vocab pickle
+            vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/vocab.pickle"
             with open(vocab_pickle, 'rb') as inputfile:
                 vocab = pickle.load(inputfile)
             vocab, sequences = convert_samples_to_model_input(cleaned_samples=concat_samples,
