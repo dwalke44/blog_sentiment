@@ -5,8 +5,8 @@ import pickle
 import pandas as pd
 import numpy as np
 from collections import Counter
-# from sentiment.python.text_ops import convert_samples_to_model_input
-from text_ops import convert_samples_to_model_input
+from sentiment.python.text_ops import convert_samples_to_model_input
+# from text_ops import convert_samples_to_model_input
 
 def fetch_gamedays(input_tbl: str, dbpath: str):
     """
@@ -48,10 +48,10 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     # --------------------------------------------
     # config path for IDE dev
-    # config.read('sentiment/config/config.ini')
+    config.read('sentiment/config/config.ini')
     # comment out when dev complete
     # ---------------------------------------------
-    config.read('config/config.ini')
+    # config.read('config/config.ini')
     dbpath = config['DEFAULT']['dbpath']
     date_tbl = config['LOCALDB']['urls_dates_tokens']
     num_urls_per_sample = int(config['MODEL_OPS']['num_urls_per_sample'])
@@ -98,9 +98,9 @@ if __name__ == '__main__':
 
             sequence_df = pd.DataFrame(sequences)
             sequence_df = sequence_df.assign(gamedate=gameday)
-            sequence_df = sequence_df.assign(result=results.loc[results[0]==gameday, 1][0])
+            sequence_df = sequence_df.assign(result=results.loc[results[0]==gameday, 1][i])
             con = sqlite3.connect(f'{dbpath}')
-            sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='append')
+            sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='replace')
 
         else:
             # Get vocab pickle
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
             sequence_df = pd.DataFrame(sequences)
             sequence_df = sequence_df.assign(gamedate=gameday)
-            sequence_df = sequence_df.assign(result=results.loc[results[0] == gameday, 1][0])
+            sequence_df = sequence_df.assign(result=results.loc[results[0] == gameday, 1][i])
             con = sqlite3.connect(f'{dbpath}')
             sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='append')
         print(f'Iterating to next gameday')
