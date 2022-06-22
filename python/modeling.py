@@ -30,7 +30,7 @@ def standardize_targets(targets):
     for x in targets:
         output.append((x-mean)/std_dev)
 
-    return output
+    return mean, std_dev, output
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
@@ -47,11 +47,7 @@ if __name__ == "__main__":
     input_df = fetch_all_training_data(dbpath=dbpath, tbl_name=input_tbl_name)
     dates = input_df.iloc[:, 301].unique()
     targets = input_df.iloc[:, 302].unique()
-    y = standardize_targets(targets=targets)
-    # Get vocab pickle
-    vocab_pickle = f"{config['TEXT_OPS']['pickle_jar']}/vocab.pickle"
-    with open(vocab_pickle, 'rb') as inputfile:
-        vocab = pickle.load(inputfile)
+    y_mean, y_std_dev, y = standardize_targets(targets=targets)
 
     # Put model together
     # input_features = 300
@@ -68,4 +64,4 @@ if __name__ == "__main__":
     model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
 
     # Train model
-    for i in np.arange(0, dates):
+    # for i in np.arange(0, dates):
