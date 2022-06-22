@@ -1,11 +1,15 @@
+import os
 import configparser
 import math
+import random
 import sqlite3
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers import Embedding, Flatten, Dense
+
+random.seed(865)
 
 
 def fetch_all_training_data(dbpath:str, tbl_name:str):
@@ -77,5 +81,5 @@ if __name__ == "__main__":
         y_test = pd.Series(y[i], index=np.arange(0, X_test.shape[0]), name='y').to_numpy()
 
         history = model.fit(X_train, y_train, batch_size=1, epochs=10,
-                            validation_data= (X_test, y_test))
+                            validation_data=(X_test, y_test))
         model.save_weights('sentiment/output/models/model1.h5')
