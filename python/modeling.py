@@ -61,6 +61,7 @@ if __name__ == "__main__":
     model = Sequential()
     model.add(Embedding(10000, 64, input_length=max_len))
     model.add(Flatten())
+    # model.add(Dense(32, activation='linear'))
     model.add(Dense(1, activation='linear'))
     model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
 
@@ -70,4 +71,11 @@ if __name__ == "__main__":
         X = X.iloc[:, 1:301]
         X_train = X.sample(n=25)
         X_test = X.drop(X_train.index)
-        y_train = np.array(y[i], X_train.shape[1])
+        X_train = X_train.to_numpy()
+        X_test = X_test.to_numpy()
+        y_train = pd.Series(y[i], index=np.arange(0, X_train.shape[0]), name='y').to_numpy()
+        y_test = pd.Series(y[i], index=np.arange(0, X_test.shape[0]), name='y').to_numpy()
+
+        history = model.fit(X_train, y_train, batch_size=1, epochs=10,
+                            validation_data= (X_test, y_test))
+        model.save_weights('sentiment/output/models/model1.h5')
