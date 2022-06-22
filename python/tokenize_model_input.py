@@ -1,4 +1,5 @@
 import configparser
+import datetime
 import sqlite3
 import pickle
 import pandas as pd
@@ -66,6 +67,7 @@ if __name__ == '__main__':
     for i in np.arange(1, len(dates)):
         # Read in and sample tokens to form standardized input
         gameday = dates[0][i]
+        print(f'Handling gameday date of {gameday} at {datetime.datetime.now()}')
         sample = fetch_standardized_tokens(gameday=gameday,
                                            db_tbl=date_tbl,
                                            dbpath=dbpath,
@@ -118,4 +120,4 @@ if __name__ == '__main__':
             sequence_df = sequence_df.assign(result=results.loc[results[0] == gameday, 1][0])
             con = sqlite3.connect(f'{dbpath}')
             sequence_df.to_sql(name='GB_TOKENS', con=con, if_exists='append')
-        message(f'Iterating to next gameday')
+        print(f'Iterating to next gameday')
