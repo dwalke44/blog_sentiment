@@ -23,13 +23,13 @@ def fetch_all_training_data(dbpath:str, tbl_name:str):
     return df
 
 
-def fetch_targets(dbpath:str, outcome_tbl:str):
+def fetch_labeled_targets(dbpath:str, outcome_tbl:str):
     """
     Get game outcomes for season
     """
     con = sqlite3.connect(f'{dbpath}')
     ocur = con.cursor()
-    df = pd.DataFrame(ocur.execute(f"SELECT TEAM_RESULT FROM {outcome_tbl};").fetchall())
+    df = pd.DataFrame(ocur.execute(f"SELECT TEAM_RESULT, gameday FROM {outcome_tbl};").fetchall())
 
     return df
 
@@ -76,9 +76,10 @@ if __name__ == "__main__":
     input_tbl_name = config['MODEL_OPS']['input_tbl']
     outcomes = config['LOCALDB']['result_tbl']
     input_df = fetch_all_training_data(dbpath=dbpath, tbl_name=input_tbl_name)
-    dates = input_df.iloc[:, 301].unique()
-    targets = fetch_targets(dbpath=dbpath, outcome_tbl=outcomes)
-    y_mean, y_std_dev, y = standardize_targets(targets=targets)
+    targets = fetch_labeled_targets(dbpath=dbpath, outcome_tbl=outcomes)
+    dates = targets.iloc[:, 1]
+    score = targets.iloc[:, 0]
+    y_mean, y_std_dev, y = standardize_targets(targets=score)
 
     # Put model together
     # input_features = 300

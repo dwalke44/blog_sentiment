@@ -47,10 +47,9 @@ def save_to_db(dbpath, sitemap_url_df, output_tbl_name):
 
 if __name__ == '__main__':
     # Read in config
-    print(f'Reading config file.')
     config = configparser.ConfigParser()
     config.read('config/config.ini')
-    print(config['DEFAULT']['dbpath'])
+
     # Read in sitemap urls
     sitemaps = fetch_sitemaps(dbpath=config['DEFAULT']['dbpath'],
                               sm_tbl_name=config['LOCALDB']['sm_tbl_name'])
