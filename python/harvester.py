@@ -94,10 +94,9 @@ if __name__ == "__main__":
     urls_and_dates = config['LOCALDB']['urls_and_dates']
     output_tbl_name = config['LOCALDB']['urls_dates_tokens']
     embed_len = config['TEXT_OPS']['token_len']
-
     guide_df = data_import(dbpath=dbpath,
                            tbl_name=urls_and_dates)
-    guide_df.columns = ['URL', 'PUB_DATE', 'GAME_DATE']
+    guide_df.columns = ['CALDATE', 'GAMEDATE', 'URL', 'PUB_DATE']
 
     selector_meth = config['SCRAPER']['selector_method']
     selector = config['SCRAPER']['selector']
@@ -108,9 +107,9 @@ if __name__ == "__main__":
     out_df = pd.DataFrame()
     start = datetime.now()
     print(f'Beginning web scraping & text processing at {start}')
-    for i in np.arange(0, guide_df.shape[0]-2):
-        url = guide_df.loc[i][0]
-        gameday = guide_df.loc[i][2]
+    for i in np.arange(0, guide_df.shape[0]):
+        url = guide_df['URL'][i]
+        gameday = guide_df['GAMEDATE'][i]
         try:
             driver = selenium_session()
             raw_text = scrape_url(url=url,
