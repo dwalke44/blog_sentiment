@@ -37,6 +37,22 @@ def standardize_targets(targets):
     return mean, std_dev, output
 
 
+def create_model_with_embed():
+    """
+    Creates keras sequential model including embedding layer
+    """
+
+    model = Sequential()
+    model.add(Embedding(10000, 64, input_length=max_len))
+    model.add(Flatten())
+    model.add(Dense(64, activation='linear'))
+    model.add(Dense(1, activation='linear'))
+    model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
+
+    return model
+
+
+
 if __name__ == "__main__":
     config = configparser.ConfigParser()
     # --------------------------------------------
@@ -62,15 +78,11 @@ if __name__ == "__main__":
     timesteps = len(dates)
     max_len = int(config['TEXT_OPS']['token_len'])
 
-    model = Sequential()
-    model.add(Embedding(10000, 64, input_length=max_len))
-    model.add(Flatten())
-    model.add(Dense(64, activation='linear'))
-    model.add(Dense(1, activation='linear'))
-    model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
+    model = create_model_with_embed()
 
     # Train model
     for i in np.arange(0, len(dates)):
+        print(f'Training model for week {dates[i]}')
         X = input_df[input_df.iloc[:, 301] == dates[i]]
         X = X.iloc[:, 1:301]
         X_train = X.sample(n=25)
@@ -82,4 +94,5 @@ if __name__ == "__main__":
 
         history = model.fit(X_train, y_train, batch_size=1, epochs=10,
                             validation_data=(X_test, y_test))
-        model.save_weights('sentiment/output/models/model1.h5')
+        print(f'Model trained for week of {dates[i]}. Iterating.')
+    model.save_weights('sentiment/output/models/model1.h5')
