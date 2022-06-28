@@ -31,7 +31,7 @@ def pad_dates(gamedays, all_cal_days):
 
 if __name__ == '__main__':
     cfg = configparser.ConfigParser()
-    cfg.read('sentiment/config/config.ini')
+    cfg.read('config/config.ini')
     con = sqlite3.connect(f'{cfg["DEFAULT"]["dbpath"]}')
     ocur = con.cursor()
     gamedays = pd.DataFrame(ocur.execute(f"SELECT distinct gameday FROM {cfg['LOCALDB']['result_tbl']};").fetchall())
