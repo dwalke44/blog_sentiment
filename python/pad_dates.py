@@ -42,6 +42,6 @@ if __name__ == '__main__':
 
     out = pad_dates(gamedays=gamedays, all_cal_days=all_days)
 
-    out.to_sql(name=cfg['LOCALDB']['dates_tbl'], con=con, if_exists='overwrite')
+    out.to_sql(name=cfg['LOCALDB']['date_tbl'], con=con, if_exists='overwrite')
 
 
