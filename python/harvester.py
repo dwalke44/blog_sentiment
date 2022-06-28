@@ -12,8 +12,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from nltk.corpus import stopwords
-from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
-# from text_ops import word_token_drop_sw, sort_filtered_text
+# from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
+from text_ops import word_token_drop_sw, sort_filtered_text
 
 
 def data_import(dbpath, tbl_name):
