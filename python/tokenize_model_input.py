@@ -38,7 +38,7 @@ def get_outcomes(result_tbl: str, dbpath: str):
     """
     con = sqlite3.connect(f'{dbpath}')
     ocur = con.cursor()
-    df = pd.DataFrame(ocur.execute(f'SELECT GB.GAMEDAY, GB.GB_RESULT FROM {result_tbl} GB WHERE GB.SEASON = 2021;')
+    df = pd.DataFrame(ocur.execute(f'SELECT GB.GAMEDAY, GB.TEAM_RESULT FROM {result_tbl} GB WHERE GB.SEASON = 2021;')
                       .fetchall())
 
     return df
