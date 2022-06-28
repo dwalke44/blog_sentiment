@@ -29,7 +29,7 @@ def fetch_targets(dbpath:str, outcome_tbl:str):
     """
     con = sqlite3.connect(f'{dbpath}')
     ocur = con.cursor()
-    df = pd.DataFrame(ocur.execute(f"SELECT TEAM_RESULT FROM {outcome_tbl} order by gamedate;").fetchall())
+    df = pd.DataFrame(ocur.execute(f"SELECT TEAM_RESULT FROM {outcome_tbl};").fetchall())
 
     return df
 
