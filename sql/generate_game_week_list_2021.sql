@@ -8,6 +8,8 @@ FROM GB_RESULT_2021 GB
 inner join calendar c
 on gb.gameday = c.d;
 
+select * from GB_DATES_INTERIM;
+
 CREATE TABLE GB_DATES_2021 AS
 SELECT GB.*,
 				 C.D DATE_ALL,
@@ -19,3 +21,5 @@ INNER JOIN CALENDAR C
 ON  (GB.YEAR= C.YEAR AND GB.WEEK_NUM=C.WEEK_NUMBER);
 
 DROP TABLE GB_DATES_INTERIM;
+
+select * from GB_RESULT_2021;

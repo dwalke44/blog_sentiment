@@ -5,12 +5,31 @@
 
 
 --GROUP URLS BY GAME WEEK
-
+drop table GB_DATES_URLS_21;
 CREATE TABLE GB_DATES_URLS_21 AS
-select GB_URLS.loc BLOG_URL,
-			 strftime('%Y-%m-%d', lastmod) PUB_DATE,
-			 GB2.gameday GAMEDAY
+SELECT GB_DATES_2021.CALDATE,
+			 GB_DATES_2021.GAMEDATE, 
+			 GB_URLS.loc URL,
+			 strftime('%Y-%m-%d', GB_URLS.lastmod) PUB_DATE
 from GB_URLS
-INNER JOIN GB_DATES_2021 GB2
-ON  strftime('%Y-%m-%d', GB_URLS.lastmod) = GB2.DATE_ALL
-order by 2;
+inner JOIN GB_DATES_2021
+ON  strftime('%Y-%m-%d', GB_DATES_2021.CALDATE) = strftime('%Y-%m-%d', GB_URLS.lastmod)
+order by 1;
+
+select *
+from GB_DATES_URLS_21;
+
+
+SELECT GB_DATES_2021.CALDATE,
+			 GB_DATES_2021.GAMEDATE, 
+			 GB_URLS.url
+			 
+SELECT gameday, count(distinct date_all)
+from GB_DATES_2021
+group by gameday
+order by 1;
+
+SELECT "1", COUNT(*) FROM GB_URLS_TOP_300 GROUP BY "1" ORDER BY 1;
+select GAME_DATE, count(*) from GB_URLS_TEXT_LEN group by GAME_DATE ORDER BY 1;
+
+SELECT GAMEDATE, COUNT(*)  FROM GB_DATES_URLS_21 GROUP BY GAMEDATE;

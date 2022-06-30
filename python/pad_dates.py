@@ -11,7 +11,7 @@ import configparser
 
 def pad_dates(gamedays, all_cal_days):
     out_df = pd.DataFrame(columns=['CALDATE', 'GAMEDATE'])
-    for i in np.arange(0, len(gamedays)-1):
+    for i in np.arange(0, len(gamedays)):
         gameday = gamedays.iloc[i, 0]
         if i == 0:
             cal_slice = all_cal_days[all_cal_days[0] <= gameday].copy()
@@ -31,7 +31,7 @@ def pad_dates(gamedays, all_cal_days):
 
 if __name__ == '__main__':
     cfg = configparser.ConfigParser()
-    cfg.read('config/config.ini')
+    cfg.read('sentiment/config/config.ini')
     con = sqlite3.connect(f'{cfg["DEFAULT"]["dbpath"]}')
     ocur = con.cursor()
     gamedays = pd.DataFrame(ocur.execute(f"SELECT distinct gameday FROM {cfg['LOCALDB']['result_tbl']};").fetchall())
