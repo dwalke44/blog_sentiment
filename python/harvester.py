@@ -12,8 +12,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from nltk.corpus import stopwords
-from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
-# from text_ops import word_token_drop_sw, sort_filtered_text
+# from sentiment.python.text_ops import word_token_drop_sw, sort_filtered_text
+from text_ops import word_token_drop_sw, sort_filtered_text
 
 
 def data_import(dbpath, tbl_name):
@@ -96,8 +96,8 @@ if __name__ == "__main__":
     embed_len = config['TEXT_OPS']['token_len']
     guide_df = data_import(dbpath=dbpath,
                            tbl_name=urls_and_dates)
-    guide_df = guide_df[-guide_df['URL'].str.contains('game-coverage')]
     guide_df.columns = ['CALDATE', 'GAMEDATE', 'URL', 'PUB_DATE']
+    guide_df = guide_df[-guide_df['URL'].str.contains('game-coverage')]
 
     selector_meth = config['SCRAPER']['selector_method']
     selector = config['SCRAPER']['selector']
