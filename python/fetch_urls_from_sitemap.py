@@ -50,6 +50,10 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('config/config.ini')
 
+    # Collect sitemap keys
+    source_url = config['DEFAULT']['sitemap_source']
+    sitemaps = fetch_single_xml(source_url)
+
     # Read in sitemap urls
     sitemaps = fetch_sitemaps(dbpath=config['DEFAULT']['dbpath'],
                               sm_tbl_name=config['LOCALDB']['sm_tbl_name'])
