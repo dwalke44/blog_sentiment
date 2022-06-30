@@ -97,7 +97,7 @@ if __name__ == "__main__":
     guide_df = data_import(dbpath=dbpath,
                            tbl_name=urls_and_dates)
     guide_df.columns = ['CALDATE', 'GAMEDATE', 'URL', 'PUB_DATE']
-    guide_df = guide_df[-guide_df['URL'].str.contains('game-coverage')]
+    guide_df = guide_df[-guide_df['URL'].str.contains('game-coverage')].reset_index()
 
     selector_meth = config['SCRAPER']['selector_method']
     selector = config['SCRAPER']['selector']
