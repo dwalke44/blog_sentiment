@@ -146,6 +146,9 @@ if __name__ == "__main__":
             except e.TimeoutException:
                 raw_text = np.nan
                 continue
+        except e.NoSuchElementException:
+            raw_text = np.nan
+            continue
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
