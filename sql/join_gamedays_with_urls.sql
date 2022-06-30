@@ -1,9 +1,3 @@
---SELECT count(*) FROM GB_URLS;
--- drop table GB_URLS;
--- select DATE_ALL FROM GB_DATES_2021;
--- SELECT * FROM GB_DATES_2021 LIMIT 10;
-
-
 --GROUP URLS BY GAME WEEK
 drop table GB_DATES_URLS_21;
 CREATE TABLE GB_DATES_URLS_21 AS
@@ -16,20 +10,4 @@ inner JOIN GB_DATES_2021
 ON  strftime('%Y-%m-%d', GB_DATES_2021.CALDATE) = strftime('%Y-%m-%d', GB_URLS.lastmod)
 order by 1;
 
-select *
-from GB_DATES_URLS_21;
-
-
-SELECT GB_DATES_2021.CALDATE,
-			 GB_DATES_2021.GAMEDATE, 
-			 GB_URLS.url
-			 
-SELECT gameday, count(distinct date_all)
-from GB_DATES_2021
-group by gameday
-order by 1;
-
-SELECT "1", COUNT(*) FROM GB_URLS_TOP_300 GROUP BY "1" ORDER BY 1;
-select GAME_DATE, count(*) from GB_URLS_TEXT_LEN group by GAME_DATE ORDER BY 1;
-
-SELECT GAMEDATE, COUNT(*)  FROM GB_DATES_URLS_21 GROUP BY GAMEDATE;
+select distinct gamedate from GB_DATES_URLS_21;
