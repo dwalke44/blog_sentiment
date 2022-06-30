@@ -121,6 +121,9 @@ if __name__ == "__main__":
             print(f'Error: {e.ElementNotSelectableException}')
         except e.InvalidSelectorException:
             print(f'Error: {e.InvalidSelectorException}')
+        except e.NoSuchElementException:
+            raw_text = np.nan
+            continue
         except e.TimeoutException:
             # Take a break & restart driver, reattempt URL if TimeoutError
             driver.close()
@@ -147,9 +150,7 @@ if __name__ == "__main__":
             except e.TimeoutException:
                 raw_text = np.nan
                 continue
-        except e.NoSuchElementException:
-            raw_text = np.nan
-            continue
+
 
         filt_text = word_token_drop_sw(raw_text=raw_text,
                                        stopwords_set=stop_words)
