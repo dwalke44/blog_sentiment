@@ -48,27 +48,11 @@ def save_to_db(dbpath, sitemap_url_df, output_tbl_name):
 if __name__ == '__main__':
     # Read in config
     config = configparser.ConfigParser()
-    config.read('config/config.ini')
+    config.read('sentiment/config/config.ini')
 
     # Collect sitemap keys
     source_url = config['DEFAULT']['sitemap_source']
     sitemaps = fetch_single_xml(source_url)
-
-    # Read in sitemap urls
-    sitemaps = fetch_sitemaps(dbpath=config['DEFAULT']['dbpath'],
-                              sm_tbl_name=config['LOCALDB']['sm_tbl_name'])
-
-    print(f'Number of sitemaps to parse = {len(sitemaps)}')
-
-    # Parse XMLs and append to output db table
-    for sitemap in sitemaps:
-        print(f'Parsing sitemap {sitemap} at {datetime.now()}')
-        parsed_sitemap = fetch_single_xml(sitemap_url=sitemap)
-
-        print(f'Exporting sitemap at {datetime.now()}')
-        save_to_db(dbpath=config['DEFAULT']['dbpath'],
-                   sitemap_url_df=parsed_sitemap,
-                   output_tbl_name=config['LOCALDB']['url_tbl_name'])
-        print(f'Iterating to next sitemap')
-
-    print(f'Sitemaps parsed at {datetime.now()}.')
+    save_to_db(dbpath=config['DEFAULT']['dbpath'],
+               sitemap_url_df=sitemaps,
+               output_tbl_name=config['LOCALDB']['url_tbl_name'])
