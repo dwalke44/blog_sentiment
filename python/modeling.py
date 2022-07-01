@@ -6,6 +6,7 @@ import sqlite3
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import keras
 from keras.models import Sequential
 from keras.layers import Embedding, Flatten, Dense
 
@@ -90,7 +91,14 @@ if __name__ == "__main__":
     max_len = int(config['TEXT_OPS']['token_len'])
 
     model = create_model_with_embed()
+    # Save checkpoint for model
+    checkpoint_path = "sentiment/output/models/checkpoints/training_1/cp.ckpt"
+    checkpoint_dir = os.path.dirname(checkpoint_path)
 
+    # Create a callback that saves the model's weights
+    cp_callback = keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                  save_weights_only=True,
+                                                  verbose=1)
     # Train model
     for i in np.arange(0, len(dates)):
         print(f'Training model for week {dates[i]}')
@@ -104,6 +112,8 @@ if __name__ == "__main__":
         y_test = pd.Series(y[i], index=np.arange(0, X_test.shape[0]), name='y').to_numpy()
 
         history = model.fit(X_train, y_train, batch_size=1, epochs=10,
-                            validation_data=(X_test, y_test))
+                            validation_data=(X_test, y_test),
+                            callbacks=[cp_callback])
         print(f'Model trained for week of {dates[i]}. Iterating.')
+
     model.save_weights('sentiment/output/models/model1.h5')
