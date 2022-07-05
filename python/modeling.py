@@ -99,7 +99,7 @@ if __name__ == "__main__":
     cp_callback = keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                   save_weights_only=True,
                                                   verbose=1)
-    validation_output = pd.DataFrame(columns=['GAMEDAY', 'Y', 'Y_MEAN', 'Y_STD_DEV', 'Y_HAT'])
+    validation_output = pd.DataFrame()
     # Train model
     for i in np.arange(0, len(dates)):
         print(f'Training model for week {dates[i]}')
@@ -122,7 +122,9 @@ if __name__ == "__main__":
             prediction = model.predict(X_valid).mean()
             valid_output = pd.Series([dates[i+1], y[i+1], y_mean, y_std_dev, prediction])
             validation_output = validation_output.append(valid_output, ignore_index=True)
-
+        else:
+            continue
         print(f'Model trained for week of {dates[i]}. Iterating.')
 
     model.save_weights('sentiment/output/models/model1.h5')
+    validation_output.columns = ['GAMEDAY', 'Y', 'Y_MEAN', 'Y_STD_DEV', 'Y_HAT']
