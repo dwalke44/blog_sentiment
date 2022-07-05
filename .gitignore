@@ -6,5 +6,5 @@ venv/
 *.Rproj.*
 database/
 config/
-
+output/
 .Rproj.user

@@ -57,7 +57,7 @@ def create_model_with_embed():
     model = Sequential()
     model.add(Embedding(10000, 64, input_length=max_len))
     model.add(Flatten())
-    model.add(Dense(64, activation='linear'))
+    model.add(Dense(128, activation='linear'))
     model.add(Dense(1, activation='linear'))
     model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         history = model.fit(X_train, y_train, batch_size=1, epochs=4,
                             validation_data=(X_test, y_test),
                             callbacks=[cp_callback])
-        if i < len(dates):
+        if i < len(dates)-1:
             X_valid = input_df[input_df.iloc[:, 301] == dates[i+1]]
             X_valid = X_valid.iloc[:, 1:301]
             y_valid = y[i+1]
@@ -123,7 +123,7 @@ if __name__ == "__main__":
             valid_output = pd.Series([dates[i+1], y[i+1], y_mean, y_std_dev, prediction])
             validation_output = validation_output.append(valid_output, ignore_index=True)
         else:
-            continue
+            break
         print(f'Model trained for week of {dates[i]}. Iterating.')
 
     model.save_weights('sentiment/output/models/model1.h5')
