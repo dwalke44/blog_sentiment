@@ -111,7 +111,7 @@ if __name__ == "__main__":
         y_train = pd.Series(y[i], index=np.arange(0, X_train.shape[0]), name='y').to_numpy()
         y_test = pd.Series(y[i], index=np.arange(0, X_test.shape[0]), name='y').to_numpy()
 
-        history = model.fit(X_train, y_train, batch_size=1, epochs=10,
+        history = model.fit(X_train, y_train, batch_size=1, epochs=4,
                             validation_data=(X_test, y_test),
                             callbacks=[cp_callback])
         print(f'Model trained for week of {dates[i]}. Iterating.')
