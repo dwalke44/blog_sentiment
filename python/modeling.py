@@ -121,7 +121,7 @@ if __name__ == "__main__":
             y_valid = y[i+1]
             prediction = model.predict(X_valid).mean()
             valid_output = pd.Series([dates[i+1], y[i+1], y_mean, y_std_dev, prediction])
-            validation_output = validation_output.append(valid_output)
+            validation_output = validation_output.append(valid_output, ignore_index=True)
 
         print(f'Model trained for week of {dates[i]}. Iterating.')
 
