@@ -58,7 +58,6 @@ def create_model_with_embed():
     model.add(Embedding(10000, 64, input_length=max_len))
     model.add(Flatten())
     model.add(Dense(128, activation='linear'))
-    model.add(Dense(64, activation='linear'))
     model.add(Dense(1, activation='linear'))
     model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
 
