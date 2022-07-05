@@ -58,6 +58,7 @@ def create_model_with_embed():
     model.add(Embedding(10000, 64, input_length=max_len))
     model.add(Flatten())
     model.add(Dense(128, activation='linear'))
+    model.add(Dense(64, activation='linear'))
     model.add(Dense(1, activation='linear'))
     model.compile(optimizer='rmsprop', loss='mape', metrics=['mae'])
 
@@ -126,5 +127,6 @@ if __name__ == "__main__":
             break
         print(f'Model trained for week of {dates[i]}. Iterating.')
 
-    model.save_weights('sentiment/output/models/model1.h5')
     validation_output.columns = ['GAMEDAY', 'Y', 'Y_MEAN', 'Y_STD_DEV', 'Y_HAT']
+
+    model.save_weights('sentiment/output/models/model1.h5')
